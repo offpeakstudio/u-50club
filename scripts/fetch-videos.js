@@ -7,13 +7,20 @@ if (!API_KEY) {
   process.exit(1);
 }
 
-// 日時計算（1ヶ月前〜1年前）
+// 日時計算: 「1ヶ月前〜1年前」の中から、ランダムな30日間のウィンドウ（範囲）を動的に計算
 const now = new Date();
-const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+const totalDays = 305; // 365 - 30　-30
+const randomOffsetDays = Math.floor(Math.random() * totalDays);
 
-const publishedAfter = oneYearAgo.toISOString();
-const publishedBefore = oneMonthAgo.toISOString();
+// 検索終了日を「1ヶ月前〜11ヶ月前」のどこかにランダム設定
+const publishedBeforeDate = new Date(now.getTime() - (30 + randomOffsetDays) * 24 * 60 * 60 * 1000);
+// そこからさらに30日前を検索開始日に設定
+const publishedAfterDate = new Date(publishedBeforeDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+const publishedAfter = publishedAfterDate.toISOString();
+const publishedBefore = publishedBeforeDate.toISOString();
+
+console.log(`Searching date range: ${publishedAfter.split('T')[0]} to ${publishedBefore.split('T')[0]}`);
 
 // スコア計算ロジック
 function calculateScore(video, channel) {
@@ -29,8 +36,8 @@ function calculateScore(video, channel) {
   if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(title)) score += 2;
   if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(description)) score += 2;
   if (channelCountry === 'JP' || /日本|Japan/i.test(channelDesc)) score += 2;
-  if (defaultLanguage.startsWith('ja')) score += 1;
-  score += 1; // regionCode=JPによる検索基本点
+  if (defaultLanguage.startsWith('ja')) score += 2;
+  score += 2; // regionCode=JPによる検索基本点
 
   // 2. 減点キーワード
   const text = (title + " " + description).toLowerCase();
@@ -67,10 +74,10 @@ async function main() {
   try {
     console.log("Fetching low-view music videos from YouTube API...");
 
-    // 1. 音楽カテゴリ (10) の動画を複数ページ取得（最大3ページ = 150件）
+    // 1. 音楽カテゴリ (10) の動画を複数ページ取得（最大10ページ = 500件）
     let allSearchItems = [];
     let nextPageToken = '';
-    const maxPages = 5;
+    const maxPages = 10;
 
     for (let page = 0; page < maxPages; page++) {
       const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
@@ -88,7 +95,7 @@ async function main() {
     }
 
     if (allSearchItems.length === 0) {
-      console.log("No videos found in search.");
+      console.log("No videos found in search range.");
       return;
     }
 
@@ -131,8 +138,8 @@ async function main() {
       const channel = channelMap[item.snippet.channelId];
       const score = calculateScore(item, channel);
 
-      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 3
-      if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 3) {
+      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 2（概要欄が簡素な個人制作もヒットしやすく微調整）
+      if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 2) {
         qualifiedVideos.push({
           id: item.id,
           title: item.snippet.title,
