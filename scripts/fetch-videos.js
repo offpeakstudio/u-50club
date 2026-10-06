@@ -9,7 +9,7 @@ if (!API_KEY) {
 
 // 日時計算: 「1ヶ月前〜1年前」の中から、ランダムな30日間のウィンドウ（範囲）を動的に計算
 const now = new Date();
-const totalDays = 305; // 365 - 30　-30
+const totalDays = 335; // 365 - 30
 const randomOffsetDays = Math.floor(Math.random() * totalDays);
 
 // 検索終了日を「1ヶ月前〜11ヶ月前」のどこかにランダム設定
@@ -29,6 +29,7 @@ function calculateScore(video, channel) {
   const title = video.snippet.title || "";
   const description = video.snippet.description || "";
   const defaultLanguage = video.snippet.defaultLanguage || "";
+  const channelTitle = video.snippet.channelTitle || ""; // ここを確実に定義
   const channelCountry = channel?.snippet?.country || "";
   const channelDesc = channel?.snippet?.description || "";
 
@@ -39,7 +40,7 @@ function calculateScore(video, channel) {
   if (defaultLanguage.startsWith('ja')) score += 1;
   score += 1; // regionCode=JPによる検索基本点
 
-  // 2. 減点キーワード
+  // 2. 減点キーワード（タイトル・概要欄）
   const text = (title + " " + description).toLowerCase();
 
   const penalty5 = ['cover', 'カバー', '歌ってみた', '弾いてみた', 'asmr'];
@@ -48,10 +49,10 @@ function calculateScore(video, channel) {
   penalty5.forEach(kw => { if (text.includes(kw)) score -= 5; });
   penalty3.forEach(kw => { if (text.includes(kw)) score -= 3; });
 
-   // 3. 配信サービス系自動生成チャンネル（Topic / トピック）の除外
+  // 3. 配信サービス系自動生成チャンネル（Topic / トピック）の除外
   const channelTitleLower = channelTitle.toLowerCase();
   if (channelTitleLower.includes('topic') || channelTitle.includes('トピック')) {
-    score -= 3; 
+    score -= 2; // 
   }
 
   return score;
@@ -144,7 +145,7 @@ async function main() {
       const channel = channelMap[item.snippet.channelId];
       const score = calculateScore(item, channel);
 
-      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 2（概要欄が簡素な個人制作もヒットしやすく微調整）
+      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 2
       if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 2) {
         qualifiedVideos.push({
           id: item.id,
