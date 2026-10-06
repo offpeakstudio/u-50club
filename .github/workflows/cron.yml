@@ -2,9 +2,10 @@ name: Daily Video Update
 
 on:
   schedule:
-    # 毎日 UTC 15:00 (日本時間 00:00) に実行
-    - cron: '0 15 * * *'
-  workflow_dispatch: # 手動実行用ボタン
+    # 毎日 UTC 01:00 (日本時間 10:00) に実行
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+   # 手動実行用ボタン
 
 jobs:
   update-daily-videos:
