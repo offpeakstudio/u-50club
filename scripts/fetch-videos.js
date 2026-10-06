@@ -70,7 +70,7 @@ async function main() {
     // 1. 音楽カテゴリ (10) の動画を複数ページ取得（最大3ページ = 150件）
     let allSearchItems = [];
     let nextPageToken = '';
-    const maxPages = 3;
+    const maxPages = 5;
 
     for (let page = 0; page < maxPages; page++) {
       const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
