@@ -1,1 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ちっちゃいものクラブ // UNDER 50 VIEWS</title>
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --card-bg: #16181f;
+      --accent: #ff4757;
+      --text: #e1e7ed;
+      --text-dim: #7f8c8d;
+      --border: #232733;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 10px 20px;
+      border-bottom: 2px dashed var(--border);
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+
+    h1 span.tag {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    p.sub {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    .date-badge {
+      display: inline-block;
+      margin-top: 15px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .video-list {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .video-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    @media (min-width: 600px) {
+      .video-card {
+        grid-template-columns: 320px 1fr;
+      }
+    }
+
+    .embed-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .embed-container iframe {
+      position: absolute;
+      top:0; left:0; width:100%; height:100%; border:0;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .channel {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 10px;
+      font-size: 0.8rem;
+      align-items: center;
+    }
+
+    .views {
+      background: rgba(255, 71, 87, 0.15);
+      color: var(--accent);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .date { color: var(--text-dim); }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ちっちゃいものクラブ <span class="tag">u-50club</span></h1>
+    <p class="sub">再生数50回以下。毎日0時に世界から掘り起こされる5つの日本の音楽</p>
+    <div id="update-date" class="date-badge">更新日: ----/--/--</div>
+  </header>
+
+  <main>
+    <div id="video-list" class="video-list">
+      <p style="text-align:center; color: var(--text-dim);">本日の5曲を読み込み中...</p>
+    </div>
+  </main>
+
+  <footer>
+    u-50club // Underground Music Digging Machine
+  </footer>
+
+  <script>
+    async function loadDailyVideos() {
+      try {
+        const res = await fetch('./data/daily.json?t=' + Date.now());
+        const data = await res.json();
+
+        document.getElementById('update-date').innerText = `UPDATED: ${data.updatedAt}`;
+
+        const listEl = document.getElementById('video-list');
+        listEl.innerHTML = '';
+
+        data.videos.forEach((v, index) => {
+          const card = document.createElement('div');
+          card.className = 'video-card';
+          card.innerHTML = `
+            <div class="embed-container">
+              <iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
+            </div>
+            <div class="info">
+              <div>
+                <div class="title">#0${index + 1} ${v.title}</div>
+                <div class="channel">👤 ${v.channelTitle}</div>
+              </div>
+              <div class="meta">
+                <span class="views">👁 ${v.views} VIEWS</span>
+                <span class="date">📅 ${v.publishedAt}</span>
+              </div>
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+        document.getElementById('video-list').innerHTML = '<p style="text-align:center;">データの読み込みに失敗しました。</p>';
+      }
+    }
+
+    loadDailyVideos();
+  </script>
+</body>
+</html>
 
