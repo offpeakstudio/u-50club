@@ -49,10 +49,10 @@ function calculateScore(video, channel) {
   penalty5.forEach(kw => { if (text.includes(kw)) score -= 5; });
   penalty3.forEach(kw => { if (text.includes(kw)) score -= 3; });
 
-  // 3. 配信サービス系自動生成チャンネル（Topic / トピック）の優先度を下げる（-2）
+  // 3. 配信サービス系自動生成チャンネル（Topic / トピック）の優先度を下げる（-1）
   const channelTitleLower = channelTitle.toLowerCase();
   if (channelTitleLower.includes('topic') || channelTitle.includes('トピック')) {
-    score -= 2;
+    score -= 1;
   }
 
   return score;
