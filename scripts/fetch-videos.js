@@ -48,13 +48,7 @@ function calculateScore(video, channel) {
 
   penalty5.forEach(kw => { if (text.includes(kw)) score -= 5; });
   penalty3.forEach(kw => { if (text.includes(kw)) score -= 3; });
-/*
-  // 3. 配信サービス系自動生成チャンネル（Topic / トピック）の優先度を下げる（-1）
-  const channelTitleLower = channelTitle.toLowerCase();
-  if (channelTitleLower.includes('topic') || channelTitle.includes('トピック')) {
-    score -= 1;
-  }
-*/
+
   return score;
 }
 
@@ -76,6 +70,29 @@ function chunkArray(array, chunkSize) {
     results.push(array.slice(i, i + chunkSize));
   }
   return results;
+}
+
+// スコア（重み）に基づいた非復元抽出（重複なし選出）を行うヘルパー
+function weightedRandomSelect(items, count) {
+  const pool = [...items];
+  const selected = [];
+  const drawCount = Math.min(count, pool.length);
+
+  for (let i = 0; i < drawCount; i++) {
+    const totalWeight = pool.reduce((sum, item) => sum + Math.max(item.score, 1), 0);
+    let randomNum = Math.random() * totalWeight;
+
+    for (let j = 0; j < pool.length; j++) {
+      randomNum -= Math.max(pool[j].score, 1);
+      if (randomNum <= 0) {
+        selected.push(pool[j]);
+        pool.splice(j, 1); // 選ばれた要素を排除して重複を防ぐ
+        break;
+      }
+    }
+  }
+
+  return selected;
 }
 
 async function main() {
@@ -161,9 +178,8 @@ async function main() {
 
     console.log(`Matched videos passing criteria: ${qualifiedVideos.length}`);
 
-    // ランダムに並び替えて先頭5件を抽出
-    const shuffled = qualifiedVideos.sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 5);
+    // スコア加重ランダムで5件を抽出
+    const selected = weightedRandomSelect(qualifiedVideos, 5);
 
     if (selected.length === 0) {
       console.log("No videos passed the filter today. Keeping existing data.");
