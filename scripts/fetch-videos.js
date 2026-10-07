@@ -146,8 +146,8 @@ async function main() {
       const channel = channelMap[item.snippet?.channelId];
       const score = calculateScore(item, channel);
 
-      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 2
-      if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 2) {
+      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 3
+      if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 3) {
         qualifiedVideos.push({
           id: item.id,
           title: item.snippet?.title,
