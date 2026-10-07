@@ -1,45 +1,29 @@
 {
-  "updatedAt": "2026-10-06",
+  "updatedAt": "2026-10-07",
   "videos": [
     {
-      "id": "30whjVNqUHc",
-      "title": "Take the Pain away",
-      "channelTitle": "DJ Matrix - Topic",
-      "views": 38,
-      "score": 2,
-      "publishedAt": "2026-05-14"
+      "id": "UxnkK0bHLHY",
+      "title": "だれだてめぇ",
+      "channelTitle": "Zuburi - Topic",
+      "views": 36,
+      "score": 8,
+      "publishedAt": "2025-11-10"
     },
     {
-      "id": "212otUT1CuM",
-      "title": "Braxton Keith - I Ain't Tryin' (Afterparty)",
-      "channelTitle": "Braxton Keith",
-      "views": 0,
-      "score": 2,
-      "publishedAt": "2026-05-15"
-    },
-    {
-      "id": "__EWyRux7_4",
-      "title": "Till Hearse Comes",
-      "channelTitle": "DJ Matrix - Topic",
-      "views": 40,
-      "score": 2,
-      "publishedAt": "2026-05-14"
-    },
-    {
-      "id": "S8mGASyDtvo",
-      "title": "Moonlit Path",
-      "channelTitle": "Billie Elisha - Topic",
-      "views": 4,
-      "score": 2,
-      "publishedAt": "2026-04-28"
-    },
-    {
-      "id": "aEkMwqACU64",
-      "title": "Work Her Body",
-      "channelTitle": "D Sims - Topic",
+      "id": "1BjnLHBSJ60",
+      "title": "UtaHime「FIGHT SONG/UtaHime」Kabukicho Street Live",
+      "channelTitle": "おのまろ",
       "views": 8,
-      "score": 2,
-      "publishedAt": "2026-05-07"
+      "score": 8,
+      "publishedAt": "2025-11-23"
+    },
+    {
+      "id": "oDqmwBCe0Yw",
+      "title": "elika ／ オアシス (Off Vocal Version)",
+      "channelTitle": "Loser 92.3 FM",
+      "views": 41,
+      "score": 8,
+      "publishedAt": "2025-11-23"
     }
   ]
 }
