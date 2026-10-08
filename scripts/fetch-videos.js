@@ -34,10 +34,10 @@ function calculateScore(video, channel) {
   const channelDesc = channel?.snippet?.description || "";
 
   // 1. 加点要素
-  if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(title)) score += 3;
-  if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(description)) score += 2;
-  if (channelCountry === 'JP' || /日本|Japan/i.test(channelDesc)) score += 3;
-  if (defaultLanguage.startsWith('ja')) score += 2;
+  if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(title)) score += 30;
+  if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(description)) score += 20;
+  if (channelCountry === 'JP' || /日本|Japan/i.test(channelDesc)) score += 30;
+  if (defaultLanguage.startsWith('ja')) score += 20;
   score += 2; // regionCode=JPによる検索基本点
 
   // 2. 減点キーワード（タイトル・概要欄）
@@ -46,8 +46,8 @@ function calculateScore(video, channel) {
   const penalty5 = ['cover', 'カバー', '歌ってみた', '弾いてみた', 'asmr'];
   const penalty3 = ['karaoke', 'カラオケ', 'reaction', 'リアクション'];
 
-  penalty5.forEach(kw => { if (text.includes(kw)) score -= 5; });
-  penalty3.forEach(kw => { if (text.includes(kw)) score -= 3; });
+  penalty5.forEach(kw => { if (text.includes(kw)) score -= 50; });
+  penalty3.forEach(kw => { if (text.includes(kw)) score -= 30; });
 
   return score;
 }
