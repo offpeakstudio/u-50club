@@ -38,7 +38,7 @@ function calculateScore(video, channel) {
   if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(description)) score += 2;
   if (channelCountry === 'JP' || /日本|Japan/i.test(channelDesc)) score += 3;
   if (defaultLanguage.startsWith('ja')) score += 2;
-  score += 2; // regionCode=JPによる検索基本点
+  score += 1; // regionCode=JPによる検索基本点
 
   // 2. 減点キーワード（タイトル・概要欄）
   const text = (title + " " + description).toLowerCase();
