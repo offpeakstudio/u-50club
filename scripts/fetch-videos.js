@@ -106,7 +106,7 @@ async function main() {
 
     for (let page = 0; page < maxPages; page++) {
       const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
-      const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&videoCategoryId=10&regionCode=JP&publishedAfter=${publishedAfter}&publishedBefore=${publishedBefore}&order=date&maxResults=50${pageParam}&key=${API_KEY}`;
+      const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&videoCategoryId=10&relevanceLanguage=ja&regionCode=JP&publishedAfter=${publishedAfter}&publishedBefore=${publishedBefore}&order=date&maxResults=50${pageParam}&key=${API_KEY}`;
 
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
