@@ -106,7 +106,7 @@ async function main() {
 
     for (let page = 0; page < maxPages; page++) {
       const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
-      const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&videoCategoryId=10&regionCode=JP&relevanceLanguage=ja&publishedAfter=${publishedAfter}&publishedBefore=${publishedBefore}&order=date&maxResults=50${pageParam}&key=${API_KEY}`;
+      const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&videoCategoryId=10&regionCode=JP&publishedAfter=${publishedAfter}&publishedBefore=${publishedBefore}&order=date&maxResults=50${pageParam}&key=${API_KEY}`;
 
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
@@ -163,8 +163,8 @@ async function main() {
       const channel = channelMap[item.snippet?.channelId];
       const score = calculateScore(item, channel);
 
-      // 条件: 再生数 <= 50 ＆ 長さ 1分〜10分 ＆ スコア >= 2
-      if (views <= 50 && durationSec >= 60 && durationSec <= 600 && score >= 2) {
+      // 条件: 再生数 <= 100 ＆ 長さ 1分〜10分 ＆ スコア >= 2
+      if (views <= 100 && durationSec >= 60 && durationSec <= 600 && score >= 2) {
         qualifiedVideos.push({
           id: item.id,
           title: item.snippet?.title,
