@@ -99,10 +99,10 @@ async function main() {
   try {
     console.log("Fetching low-view music videos from YouTube API...");
 
-    // 1. 音楽カテゴリ (10) の動画を複数ページ取得（最大16ページ = 800件）
+    // 1. 音楽カテゴリ (10) の動画を複数ページ取得（最大20ページ = 1000件）
     let allSearchItems = [];
     let nextPageToken = '';
-    const maxPages = 16;
+    const maxPages = 20;
 
     for (let page = 0; page < maxPages; page++) {
       const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
